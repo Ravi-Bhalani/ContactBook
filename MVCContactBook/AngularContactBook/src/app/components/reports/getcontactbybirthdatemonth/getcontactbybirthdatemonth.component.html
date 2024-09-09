@@ -1,0 +1,87 @@
+<div class="container">
+    <h2 class="custom-heading  text-center my-4">Get Contacts of  {{ monthNames[selectedMonth - 1] }}
+   </h2>
+  
+ 
+   <!-- Month Dropdown -->
+   <div class="form-group rounded-corner" >
+     <label for="monthDropdown"><b>Select Month:</b></label>
+     <select id="monthDropdown" class="form-control" [(ngModel)]="selectedMonth" (change)="onMonthSelected()">
+        <option [ngValue]="0" selected disabled>---Select---</option>
+       <option *ngFor="let month of months" [value]="month.value">{{ month.name }}</option>
+     </select>
+     <div *ngIf="!selectedMonth">
+       Please select a month to view monthly salary data.
+     </div>
+   </div>
+ <div *ngIf ="selectedMonth != 0 && !contacts">
+    <tr>
+        <td colspan="3">No contacts found</td>
+    </tr>
+
+ </div>
+ 
+ 
+   <div *ngIf="contacts &&  selectedMonth" >
+    <table class="table table-borderd">
+        <thead>
+            <tr>
+                <th>Profile Photo</th>
+                <th>Name</th>
+                        
+                <th>Phone</th>
+                
+                <th>Emial</th>
+                <th>Gender</th>
+                <th>Birthdate</th>
+                <th>IsFvourite</th>
+                <th>Address</th>
+
+            </tr>
+        </thead>
+        <tbody *ngIf="contacts && contacts.length > 0 ; ">
+            <tr *ngFor="let contact of contacts">
+                <td *ngIf="contact.fileName!=null">
+                    <img *ngIf="contact.imageByte" class="card-image" [src]="'data:image/jpeg;base64,' + contact.imageByte" alt="Contact Image"
+                        [style.height.px]="50" [style.width.px]="50" style="border-radius: 50%;">
+                    <img *ngIf="!contact.fileName" src="assets/DefaultImage2.jpg" alt="Profile" width="50" height="50" style="border-radius: 50%">
+                </td>
+                <td *ngIf="contact.fileName==null">
+                    <img src="assets/DefaultImage2.png" alt="image" width="50" height="50" style="border-radius: 50%">
+                </td>
+                <td>{{ contact.firstName }} {{ contact.lastName }}</td>
+               
+                
+                <td>{{contact.phone}}</td>
+               
+                <td>{{contact.email}}</td>
+                <td>{{contact.gender }}</td>
+                <td>{{contact.birthDate| date:'yyy-MM-dd'}}</td>
+                <td>
+                    
+                    <i *ngIf="contact.isFavourite" class="fas fa-heart" style="color: red;"></i>
+                    <i *ngIf="!contact.isFavourite" class="far fa-heart"></i>
+               
+            </td>
+            <td>{{contact.address}},{{contact.stateName}},{{contact.countryName}}</td>
+               
+            </tr>
+        </tbody>
+        
+           
+       
+    </table>
+   </div>
+ 
+ 
+    <!-- No Data Template -->
+   
+   <br>
+   <div class="row">
+ 
+   </div>
+   <button class="btn btn-secondary btn-block" [routerLink]="['/paginatedcontacts']"
+   routerLinkActive="router-link-active">
+   <i class="fas fa-arrow-left"></i> Back to List
+ </button>
+ </div>

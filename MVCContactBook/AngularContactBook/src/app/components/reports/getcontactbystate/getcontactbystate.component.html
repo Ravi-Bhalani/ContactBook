@@ -1,0 +1,106 @@
+<div class="container">
+    <h2 class="custom-heading  text-center my-4">Get Contacts of  {{ selectedState.valueOf() }}
+   </h2>
+  
+ 
+     <!-- Country Dropdown -->
+     <div class="form-group rounded-corner">
+        <label for="countryDropdown"><b>Select Country:</b></label>
+        <select id="countryDropdown" class="form-control" [(ngModel)]="selectedCountry" (change)="onSelectCountry(selectedCountry)">
+            <option [ngValue]="0"selected disabled>---Select---</option>
+            <option *ngFor="let country of country" [value]="country.countryId">{{ country.countryName }}</option>
+        </select>
+        <div *ngIf="!selectedCountry">
+            Please select a country.
+        </div>
+    </div>
+
+    <!-- State Dropdown -->
+    <div *ngIf="state.length > 0 && selectedCountry">
+        <div class="form-group rounded-corner">
+            <label for="stateDropdown"><b>Select State:</b></label>
+            <select id="stateDropdown" class="form-control" [(ngModel)]="selectedState" (change)="getContacts()">
+                <option [ngValue]="0" selected disabled>---Select---</option>
+                <option *ngFor="let st of state" [value]="st.stateId">{{ st.stateName }}</option>
+            </select>
+            <div *ngIf="!selectedState && selectedCountry != 0">
+                Please select a state to view contacts.
+            </div>
+        </div>
+    </div>
+
+
+   
+ 
+ 
+ 
+   <div *ngIf="contacts &&  selectedState " >
+    <table class="table table-borderd">
+        <thead>
+            <tr>
+                <th>Profile Photo</th>
+                <th>Name</th>
+                        
+                <th>Phone</th>
+                
+                <th>Emial</th>
+                <th>Gender</th>
+                <th>Birthdate</th>
+                <th>IsFvourite</th>
+                <th>Address</th>
+
+            </tr>
+        </thead>
+        <tbody *ngIf="contacts && contacts.length > 0 ; ">
+            <tr *ngFor="let contact of contacts">
+                <td *ngIf="contact.fileName!=null">
+                    <img *ngIf="contact.imageByte" class="card-image" [src]="'data:image/jpeg;base64,' + contact.imageByte" alt="Contact Image"
+                        [style.height.px]="50" [style.width.px]="50" style="border-radius: 50%;">
+                    <img *ngIf="!contact.fileName" src="assets/DefaultImage2.jpg" alt="Profile" width="50" height="50" style="border-radius: 50%">
+                </td>
+                <td *ngIf="contact.fileName==null">
+                    <img src="assets/DefaultImage2.png" alt="image" width="50" height="50" style="border-radius: 50%">
+                </td>
+                <td>{{ contact.firstName }} {{ contact.lastName }}</td>
+               
+                
+                <td>{{contact.phone}}</td>
+               
+                <td>{{contact.email}}</td>
+                <td>{{contact.gender }}</td>
+                <td>{{contact.birthDate| date:'yyy-MM-dd'}}</td>
+                <td>
+                    
+                    <i *ngIf="contact.isFavourite" class="fas fa-heart" style="color: red;"></i>
+                    <i *ngIf="!contact.isFavourite" class="far fa-heart"></i>
+               
+            </td>
+            <td>{{contact.address}},{{contact.stateName}},{{contact.countryName}}</td>
+               
+            </tr>
+        </tbody>
+        <ng-template #noContacts>
+            <tr *ngIf="contacts.length == 0" >
+                <td colspan="3">No contacts found</td>
+            </tr>
+        </ng-template>
+    </table>
+   </div>
+   <br>
+ 
+ 
+    <!-- No Data Template -->
+   
+     <div class="rounded-corner no-data text-danger alert alert-danger" role="alert"  *ngIf="  contacts == null " >
+       No data available for the selected state.
+     </div>
+  
+   <br>
+   <div class="row">
+ 
+   </div>
+   <button class="btn btn-secondary btn-block" [routerLink]="['/paginatedcontacts']"
+   routerLinkActive="router-link-active">
+   <i class="fas fa-arrow-left"></i> Back to List
+ </button>
+ </div>

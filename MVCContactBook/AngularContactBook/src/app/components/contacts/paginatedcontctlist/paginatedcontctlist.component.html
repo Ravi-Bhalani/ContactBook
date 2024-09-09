@@ -1,0 +1,129 @@
+
+<h1>Contacts</h1>
+
+<div class="input-group mb-3">
+    <input type="text" name="searchQuery" class="form-control" [(ngModel)]="searchQuery" (input)="filterContacts()" placeholder=" Search Contact">
+   
+    <div class="input-group-append">
+        <button class="btn btn-outline-secondary" type="button" (click)="clearSearch()" style="margin-left: 5px;">Clear</button>
+    </div>
+</div>
+
+<div *ngIf="loading">
+    <img src="assets/loaderImage.gif" alt="loading..." />
+</div>
+
+<div>
+  <button class="btn btn-outline-danger" type="submit" [routerLink]="['/favouritecontacts']" routerLinkActive="router-link-active" style="margin: 4px;">
+      <i class="fas fa-heart " style="color: red;"></i> Favourite
+  </button>
+</div>
+
+<div>
+    <!-- <button class="btn btn-outline-primary" *ngFor="let letter of alphabet" (click)="onLetterClick(letter)">{{ letter }}</button> -->
+    <ng-container *ngIf="contacts && contacts.length > 0">
+        <button *ngFor="let letter of uniqueFirstLetters" class="btn btn-outline-primary" (click)="onLetterClick(letter)">{{ letter }}</button>
+    </ng-container>
+    <button class="btn btn-outline-primary" (click)="onShowAll()">Show All</button>
+</div>
+
+<div *ngIf="!loading">
+
+    <table class="table table-borderd">
+        <thead>
+            <tr>
+                <th>Profile Photo</th>
+                <th>
+                    <div class="name-header">
+                        <span>Name</span>
+                        <span class="my-icon">
+                            <i id="up" class="fas fa-sort-up" (click)="sortAse(selectedLetter)"></i>
+                            <i id="down" class="fas fa-sort-down" (click)="sortDes(selectedLetter)"></i>
+                        </span>
+                    </div>
+                </th>
+                <th></th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody *ngIf="contacts && contacts.length > 0 && totalItems != 0; else noContacts">
+            <tr *ngFor="let contact of contacts">
+                <td *ngIf="contact.fileName!=null">
+                    <img *ngIf="contact.imageByte" class="card-image" [src]="'data:image/jpeg;base64,' + contact.imageByte" alt="Contact Image"
+                        [style.height.px]="50" [style.width.px]="50" style="border-radius: 50%;">
+                    <img *ngIf="!contact.fileName" src="assets/DefaultImage2.jpg" alt="Profile" width="50" height="50" style="border-radius: 50%">
+                </td>
+                <td *ngIf="contact.fileName==null">
+                    <img src="assets/DefaultImage2.png" alt="image" width="50" height="50" style="border-radius: 50%">
+                </td>
+                <td>{{ contact.firstName }} {{ contact.lastName }}</td>
+                <!-- <td> <span *ngIf="contact.isFavourite"class="far fa-heart" style="color: red;"></span></td> -->
+                <td>
+                    <span (click)="toggleFavourite(contact)" style="cursor: pointer;">
+                        <i *ngIf="contact.isFavourite" class="fas fa-heart" style="color: red;"></i>
+                        <i *ngIf="!contact.isFavourite" class="far fa-heart"></i>
+                    </span>
+                </td>
+                <td>
+                    <a class="btn btn-outline-warning" [routerLink]="['/contactdetails',contact.contactId]" routerLinkActive="router-link-active" style="margin-left: 4px; margin-right: 10px;"><i class="fas fa-info-circle"></i>Details</a>
+                    <a class="btn btn-outline-dark" [routerLink]="['/editcontacts',contact.contactId]" routerLinkActive="router-link-active" style="margin-left: 4px; margin-right: 10px;" *ngIf="isAuthenticated"><i class="fas fa-edit"></i>Edit</a>
+                    <a class="btn btn-outline-dark" [routerLink]="['/editrf',contact.contactId]" routerLinkActive="router-link-active" style="margin-left: 4px; margin-right: 10px;" *ngIf="isAuthenticated"><i class="fas fa-edit"></i>Edit RF</a>
+
+                    <a class="btn btn-outline-danger" (click)="deleteContact(contact.contactId)" style="margin-left: 4px; margin-right: 10px;" *ngIf="isAuthenticated"><i class="fas fa-trash-alt"></i>Delete</a>
+                </td>
+            </tr>
+        </tbody>
+        <ng-template #noContacts>
+            <tr>
+                <td colspan="3">No contacts found</td>
+            </tr>
+        </ng-template>
+    </table>
+
+    <div class="row justify-content-end">
+      <div class="col-auto">
+          <label for="pageSize">Page Size:</label>
+          <select id="pageSize" class="form-control" [(ngModel)]="pageSize" (change)="changePageSize(pageSize,selectedLetter)">
+              <option [ngValue]="2">2</option>
+              <option [ngValue]="4">4</option>
+              <option [ngValue]="6">6</option>
+          </select>
+      </div>
+  </div>
+
+     <!-- Pagination controls -->
+    
+    <div class="pagination-container">
+      <ul class="pagination ">
+          <li *ngFor="let i of [].constructor(totalPages); let index = index" class="page-item"
+              [class.active]="pageNumber === index + 1">
+              <a class="page-link" (click)="changePage(index + 1)">{{ index + 1 }}</a>
+          </li>
+      </ul>
+  
+      <div class="pagination justify-content-end">
+          <button class="btn btn-primary" [disabled]="pageNumber === 1" (click)="changePage(pageNumber - 1,selectedLetter)"style="margin-left: 4px; margin-right: 10px;"><i class="fas fa-arrow-left"></i></button>
+          <button class="btn btn-primary" [disabled]="pageNumber === totalPages" (click)="changePage(pageNumber + 1,selectedLetter)"style="margin-left: 4px; margin-right: 10px;"><i class="fas fa-arrow-right"></i></button>
+      </div>
+  </div>
+</div>
+
+<a class="btn btn-primary" [routerLink]="['/addcontacts']" routerLinkActive="router-link-active" style="margin-left: 4px; margin-right: 10px;" *ngIf="isAuthenticated">Add</a>
+<a class="btn btn-primary" [routerLink]="['/addrf']" routerLinkActive="router-link-active" style="margin-left: 4px; margin-right: 10px;" *ngIf="isAuthenticated">Add RF</a>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 

@@ -1,0 +1,45 @@
+<div class="container">
+    <h2 class="custom-heading  text-center my-4">Total Contact Count For Each Gender
+   </h2>
+<div *ngIf="maleCount &&  femaleCount else noData" >
+    <table class="table table-borderd">
+        <thead>
+            <tr>
+                <th>Male count</th>
+                <th>Female count</th>
+                
+
+            </tr>
+        </thead>
+        <tbody *ngIf="maleCount && femaleCount > 0 ; else noContacts">
+            <tr>
+                <td>{{this.maleCount}}</td>
+                <td>{{this.femaleCount}}</td>
+
+               
+            </tr>
+        </tbody>
+        <ng-template #noContacts>
+            <tr>
+                <td colspan="3">No contacts found</td>
+            </tr>
+        </ng-template>
+    </table>
+   </div>
+ 
+ 
+    <!-- No Data Template -->
+    <ng-template #noData>
+     <div class="rounded-corner no-data text-danger">
+       <p>No data available.</p>
+     </div>
+   </ng-template>
+   <br>
+   <div class="row">
+ 
+   </div>
+   <button class="btn btn-secondary btn-block" [routerLink]="['/paginatedcontacts']"
+   routerLinkActive="router-link-active">
+   <i class="fas fa-arrow-left"></i> Back to List
+ </button>
+ 

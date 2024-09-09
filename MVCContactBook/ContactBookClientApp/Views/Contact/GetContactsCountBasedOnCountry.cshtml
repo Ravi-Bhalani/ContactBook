@@ -1,0 +1,72 @@
+﻿
+<div class="row">
+    <div class="col-md-6">
+        <div class="form-group">
+            <label class="control-label"></label>
+            <select id="divisionDropdown" class="form-control" asp-items="@(new SelectList(ViewBag.Country, "CountryId", "CountryName"))">
+                <option value="">--Select Country--</option>
+            </select>
+        </div>
+        
+    </div>
+</div>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Count</th>
+          
+        </tr>
+    </thead>
+    @if (ViewBag.CountryId != null)
+    {
+        <tbody>
+           
+            
+                <tr>
+                    <td>@ViewBag.ContactCount</td>
+                   
+                </tr>
+            
+        </tbody>
+    }
+</table>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        var selectedCountry = document.getElementById("divisionDropdown");
+
+        var urlParams = new URLSearchParams(window.location.search);
+        var countryId = urlParams.get('countryId');
+
+        if (countryId) {
+            selectedCountry.value = countryId;
+        }
+
+        selectedCountry.addEventListener("change", function () {
+            window.location.href = '@Url.Action("GetContactsCountBasedOnCountry", "Contact")?countryId=' + encodeURIComponent(selectedCountry.value);
+        });
+    });
+    $(function () {
+        // Initially hide all state options
+        $('#positionDropdown option').hide();
+
+        // Get the initially selected country
+        var initialCountry = $('#divisionDropdown').val();
+
+        // Show state options corresponding to the initially selected country
+        $('#positionDropdown option[data-category="' + initialCountry + '"]').show();
+
+        $('#divisionDropdown').change(function () {
+            var selectedCountry = $(this).val();
+            $('#positionDropdown option').hide();
+            $('#positionDropdown option[data-category="' + selectedCountry + '"]').show();
+
+            // Select the first visible option in the state dropdown
+            $('#positionDropdown').val($('#positionDropdown option[data-category="' + selectedCountry + '"]:visible:first').val());
+        });
+    });
+
+</script>

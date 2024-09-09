@@ -1,0 +1,31 @@
+
+<h2 class="text-center mb-4">Contact Details</h2>
+<div class="container h-100 d-flex justify-content-center align-items-center">
+     
+    <div class="card" style="max-width: 20rem;">
+        <div class="card-body">
+            <div class="text-center mb-3">
+                <img *ngIf="contact.imageByte" class="card-image img-fluid rounded-circle" [src]="'data:image/jpeg;base64,' + contact.imageByte" alt="Contact Image">
+            </div>
+            <h5 class="card-title text-center">{{contact.firstName}} {{contact.lastName}}</h5>
+            <div class="text-muted mb-3">
+                <p><i class="fas fa-phone-alt mr-2"></i> {{contact.phone}}</p>
+                <p><i class="fas fa-map-marker-alt mr-2"></i> {{contact.address}}</p>
+                <p><i class="fas fa-envelope mr-2"></i> {{contact.email }}</p>
+                <p><i class="fas fa-venus-mars mr-2"></i> {{contact.gender ? 'Male' : 'Female'}}</p>
+                <p><i class="far fa-star mr-2"></i> {{contact.isFavourite ? 'Favourite' : 'Not Favourite'}}</p>
+                <p><i class="fas fa-map-marker-alt mr-2"></i> {{contact.state.stateName}}</p>
+                <p><i class="fas fa-globe mr-2"></i> {{contact.country.countryName}}</p>
+                <p><i class="fa fa-birthday-cake"></i> {{contact.birthdate | date:'yyy-MM-dd'}}</p>
+
+            </div>
+            <div class="text-center">
+                <a class="btn btn-primary mb-2" [routerLink]="['/paginatedcontacts']"><i class="fas fa-arrow-left mr-1"></i> Back to List</a>
+                <a class="btn btn-primary mb-2 mx-2" [routerLink]="['/editcontacts', contact.contactId]"><i class="fas fa-edit mr-1"></i> Edit</a>
+                <button class="btn btn-danger mb-2" (click)="deleteContact(contact.contactId)"><i class="fas fa-trash-alt mr-1"></i> Delete</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+

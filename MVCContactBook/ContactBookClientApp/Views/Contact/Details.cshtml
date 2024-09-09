@@ -1,0 +1,105 @@
+﻿@using ContactBookClientApp.ViewModels
+@model UpdateContactViewModel
+
+<h3 >Contact Details</h3>
+<div >
+
+@* <div class="card container text-dark bg-light m-3 p-0" style="max-width: 30rem; ">
+    <div class="card-header px-0" style="display: flex; justify-content:center;">
+        @if (Model.FileName == string.Empty)
+        {
+            <img src="~/uploads/DefaultImage.jpg" alt="Employee Image" width="70" height="70" style="border-radius: 50%;" />
+         }
+        else
+        {
+            <img src="~/uploads/@Model.FileName" alt="Employee Image" width="70" height="70" style="border-radius: 50%;" />
+        }
+    </div>
+    <div class="card-body">
+        <p class="card-text">
+            <h6>Name: @Model.FirstName @Model.LastName</h6>
+            <h6>Phone: @Model.Phone </h6>
+            <h6>Address: @Model.Address </h6>
+            <h6>Email: @Model.Email </h6>
+                @if (@Model.Gender == "F")
+                {
+                    <h6>Gender: Female</h6>
+                }
+                else
+                {
+                    <h6>Gender: Male</h6>
+                }
+                @if (@Model.IsFavourite)
+                {
+
+                    <h6>Favourite: Yes</h6>
+                }
+                else
+                {
+                    <h6>Favourite: No</h6>
+
+                }
+                <h6>Country: @Model.Country.CountryName</h6>
+            <h6>State: @Model.State.StateName</h6>
+        </p>
+    </div>
+</div> *@
+
+    <div class="card text-center">
+        <div class="card-header">
+            <h4>@Model.FirstName @Model.LastName</h4>
+        </div>
+        <div class="card-body">
+            <h4>
+                @if (Model.FileName == null)
+                {
+                    <img src="~/uploads/DefaultImage.jpg" alt="Employee Image" width="70" height="70" style="border-radius: 50%;" />
+
+                }
+                else
+                {
+                    <img src="~/uploads/@Model.FileName" alt="Employee Image" width="70" height="70" style="border-radius: 50%;" />
+
+                }
+            </h4>
+            <h4>Phone :@Model.Phone</h4>
+
+            <h4>Email :@Model.Email</h4>
+            <h4>Address :@Model.Address</h4>
+            <h4>Date of Birth :@Model.Birthdate.ToString("yyyy-MM-dd")</h4>
+            @if (@Model.Gender == "F")
+            {
+                <h6>Gender: Female</h6>
+            }
+            else
+            {
+                <h6>Gender: Male</h6>
+            }
+            @if (@Model.IsFavourite)
+            {
+
+                <h6>Favourite: Yes</h6>
+            }
+            else
+            {
+                <h6>Favourite: No</h6>
+
+            }
+            <h6>Country: @Model.Country.CountryName</h6>
+            <h6>State: @Model.State.StateName</h6>
+            <dl class="row">
+            </dl>
+            @*  <a href="#" class="btn btn-primary">Go somewhere</a> *@
+        </div>
+        <div class="card-footer text-body-secondary">
+            <p>
+                <button type="button" class="btn btn-info"> <a asp-action="Edit" asp-route-id="@Model.ContactId" style="text-decoration: none; color:black">Edit</a></button>
+                <button type="button" class="btn btn-danger"><a asp-action="Delete" asp-route-id="@Model.ContactId" style="text-decoration: none; color:black">Delete</a></button>
+                <button type="button" class="btn btn-info"><a asp-action="Index" style="text-decoration: none; color:black">Home</a></button>
+
+            </p>
+        </div>
+    </div>
+
+</div>
+<a asp-action="Index" class="btn btn-secondary">Back To List</a>
